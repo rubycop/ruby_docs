@@ -1,0 +1,18 @@
+# We want save "key2" with its value "val2" into @hash.
+# We can store this hash into instance variable @hash through the method default_hash
+
+class A
+  def default_hash
+    @hash = { key1: "val1" }
+  end
+
+  def change_default_hash
+    default_hash[:key2] = "val2"
+  end
+end
+
+> obj = A.new             # => #<A:0x00000000f85cc8>
+> obj.default_hash        # => {:key1=>"val1"}
+> obj                     # => #<A:0x00000000f85cc8 @hash={:key1=>"val1"}>
+> obj.change_default_hash # => "val2"
+> obj                     # => #<A:0x00000000f85cc8 @hash={:key1=>"val1", :key2=>"val2"}>
