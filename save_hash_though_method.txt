@@ -1,18 +1,28 @@
-# We want save "key2" with its value "val2" into @hash.
-# We can store this hash into instance variable @hash through the method default_hash
+# Assing hash for instance variable thought the method w/o params
 
 class A
-  def default_hash
-    @hash = { key1: "val1" }
-  end
-
-  def change_default_hash
-    default_hash[:key2] = "val2"
+  def hash_store
+    @hash ||= {}
   end
 end
 
-> obj = A.new             # => #<A:0x00000000f85cc8>
-> obj.default_hash        # => {:key1=>"val1"}
-> obj                     # => #<A:0x00000000f85cc8 @hash={:key1=>"val1"}>
-> obj.change_default_hash # => "val2"
-> obj                     # => #<A:0x00000000f85cc8 @hash={:key1=>"val1", :key2=>"val2"}>
+> obj = A.new                    #=> <A:0x00>
+> obj.hash_store                 #=> {}
+> obj.hash_store[:key1] = "val1" #=> "val1"
+> obj                            #=> #<A:0x00 @hash={:key1=>"val1"}>
+> obj.hash_store                 #=> {:key1=>"val1"}
+
+# Assign with params
+
+class A
+  def hash_store(hash = {})
+    @hash ||= {}
+    @hash.merge!(hash)
+  end
+end
+
+> obj = A.new                     #=> <A:0x00>
+> obj.hash_store                  #=> {}
+> obj.hash_store[:key1] = "val1"  #=> "val1"
+> obj.hash_store({:key2=>"val2"}) #=> {:key1=>"val1", :key2=>"val2"}
+> obj                             #=> #<A:0x00 @hash={:key1=>"val1", :key2=>"val2"}>
