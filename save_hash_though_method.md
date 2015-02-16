@@ -1,5 +1,5 @@
-# Assing hash for instance variable thought the method w/o params
-
+#### Assing hash for instance variable thought the method w/o params
+```ruby
 class A
   def hash_store
     @hash ||= {}
@@ -11,9 +11,9 @@ end
 > obj.hash_store[:key1] = "val1" #=> "val1"
 > obj                            #=> #<A:0x00 @hash={:key1=>"val1"}>
 > obj.hash_store                 #=> {:key1=>"val1"}
-
-# Assign with params
-
+```
+#### Assign with params
+```ruby
 class A
   def hash_store(hash = {})
     @hash ||= {}
@@ -26,3 +26,4 @@ end
 > obj.hash_store[:key1] = "val1"  #=> "val1"
 > obj.hash_store({:key2=>"val2"}) #=> {:key1=>"val1", :key2=>"val2"}
 > obj                             #=> #<A:0x00 @hash={:key1=>"val1", :key2=>"val2"}>
+```
