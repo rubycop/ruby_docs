@@ -262,3 +262,186 @@ end
 
 my_kernel_meth #=> "my Kernel method"
 ```
+
+#### Lazy Instance Variable
+Wait until the first access to initialize ana instance variable.
+```ruby
+module A
+  def attr
+    @var = @var || "some val"
+  end
+end
+
+C.new.attr #=> "some val"
+```
+
+#### Mimic Method
+Disguise a method as another language construct.
+```ruby
+def A(obj)
+  obj == "string" ? String : Object
+end
+
+class B < A("string") # a method that looks like a class
+  attr_accessor :attr # a method that looks like a keyword
+end
+
+C.new.attr = 1 # a method that looks like an attribute
+```
+
+#### Monkeypatch
+Change thr features of an existing class.
+```ruby
+"abc".reverse #=> "cba"
+
+class String
+  def reverse; "some val"; end
+end
+
+"abc".reverse #=> "some val"
+```
+
+#### Named Arguments (Ruby 2.0)
+```ruby
+def meth(val1: "val1") 
+  p val1 
+end 
+  
+meth(val1: "new val1") #=> "new val1"
+meth("new val1") #=> wrong number of arguments (1 for 0)
+```
+
+#### Namespace
+```ruby
+module M
+  class Array
+    def to_s; "some val"; end
+  end
+end
+
+Array.new.to_s    #=> "[]"
+M::Array.new.to_s #=> "some val"
+```
+
+#### Nil Guard
+```ruby
+x = nil
+y = x || "some val" #=> "some val"
+```
+
+#### Object Extension
+Define Singleton methods by mixeng a module into an object's eigenclass.
+```ruby
+obj = Object.new
+
+module M
+  def meth; "singleton meth"; end
+end
+
+class << obj; include M; end
+
+obj.meth #=> "singleton meth"
+```
+
+#### Open Class
+Modify an existing class.
+```ruby
+class String
+  def meth; "some val"; end
+end
+
+"abc".meth #=> "some val"
+```
+
+#### Pattern Dispatch
+```ruby
+class C
+  def meth1; "meth1"; end
+  def meth2; "meth2"; end
+end
+
+obj = C.new
+obj.methods.each do |m|
+  obj.send(m) if m.to_s =~ /meth/
+end
+```
+
+#### Sandbox
+Execute intrusted code in a safe environment.
+```ruby
+def sandbox(&code)
+  proc {
+    $SAFE = 2
+    yield
+  }.call
+end
+
+begin
+  sandbox { File.delete 'file' }
+rescue Exception => ex
+  ex #=> #<SecurityError: Insecure operation `delete' at level 2>
+end
+```
+
+#### Scope Gate
+```ruby
+a = 1
+defined? a #=> "local-variable"
+
+module M
+  b = 1
+  defined? a #=> nil
+  defined? b #=> "local-variable"
+end
+
+defined? b #=> nil
+```
+
+#### Self Yield
+```ruby
+class A
+  attr_accessor :attr1, :attr2
+  
+  def initialize; yield self; end
+end
+
+A.new {|a| a.attr1; a.attr2;}
+```
+
+#### Shared Scope
+Share variables among multiply contexts in the same *Flat Scope*
+```ruby
+lambda {
+  var = 10
+  self.class.class_eval do
+    define_method :counter; var; end
+    define_method :down; var -= 1; end
+  end
+}
+
+counter #=> 10
+down    #=> 9
+```
+
+#### Singleton Method
+```ruby
+obj = "abc"
+
+class << obj
+  def meth; "bca"; end
+end
+
+obj.meth #=> "bca"
+```
+
+#### String Of Code
+Evaluate a string of ruby code
+```ruby
+code = "1 + 1"
+eval(code) #=> 2
+```
+
+#### Symbol To Proc
+```ruby
+[1, 2].map(&:to_s) #=> ["1", "2"]
+```
