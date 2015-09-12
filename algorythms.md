@@ -4,6 +4,7 @@
 Consist of:
 
 1) **Quick Find**
+
 2) **Quick Union**
 
 > Array that will use for examples `a = [0, 1, 2, 3, 4]`
@@ -27,22 +28,24 @@ union(2, 1)  #=> a = [0, 0, 0, 3, 4]
 # Quick Find
 class QF
   attr_accessor :id
-  
+
   def initialize(size)
     @id = []
     size.times {|i| @id << i}
   end
-  
+
   def is_conn?(a, b)
     @id[a] == @id[b]
   end
-  
+
   def union(a, b)
     return if is_conn?(a, b)
-    
-    @id.each do |i|
+
+    for i in 0...@id.size do
       @id[i] = @id[b] if @id[i] == @id[a]
     end
+    
+    @id
   end
 end
 ```
